@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include <glm/fwd.hpp>
 
 class Gizmos
 {
@@ -94,8 +94,8 @@ private:
 
 	struct GizmoVertex
 	{
-		glm::vec4 position;
-		glm::vec4 colour;
+		float x, y, z, w;
+		float r, g, b, a;
 	};
 
 	struct GizmoLine
@@ -153,8 +153,3 @@ private:
 
 	static Gizmos*	sm_singleton;
 };
-
-inline void Gizmos::draw(const glm::mat4& a_projection, const glm::mat4& a_view)
-{
-	draw(a_projection * a_view);
-}

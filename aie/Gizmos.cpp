@@ -1,5 +1,7 @@
-#include <Gizmos.h>
+#include <aie/Gizmos.h>
 #include <gl_core_4_4.h>
+#define GLM_SWIZZLE
+#include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
 Gizmos* Gizmos::sm_singleton = nullptr;
@@ -186,9 +188,9 @@ void Gizmos::addTransform(const glm::mat4& a_transform, float a_fScale /* = 1.0f
 	glm::vec4 vGreen(0,1,0,1);
 	glm::vec4 vBlue(0,0,1,1);
 
-	addLine(a_transform[3].xyz, vXAxis.xyz, vRed, vRed);
-	addLine(a_transform[3].xyz, vYAxis.xyz, vGreen, vGreen);
-	addLine(a_transform[3].xyz, vZAxis.xyz, vBlue, vBlue);
+	addLine(a_transform[3].xyz(), vXAxis.xyz(), vRed, vRed);
+	addLine(a_transform[3].xyz(), vYAxis.xyz(), vGreen, vGreen);
+	addLine(a_transform[3].xyz(), vZAxis.xyz(), vBlue, vBlue);
 }
 
 void Gizmos::addAABB(const glm::vec3& a_center, 
@@ -203,9 +205,9 @@ void Gizmos::addAABB(const glm::vec3& a_center,
 
 	if (a_transform != nullptr)
 	{
-		vX = (*a_transform * glm::vec4(vX,0)).xyz;
-		vY = (*a_transform * glm::vec4(vY,0)).xyz;
-		vZ = (*a_transform * glm::vec4(vZ,0)).xyz;
+		vX = (*a_transform * glm::vec4(vX,0)).xyz();
+		vY = (*a_transform * glm::vec4(vY,0)).xyz();
+		vZ = (*a_transform * glm::vec4(vZ,0)).xyz();
 	}
 
 	// top verts
@@ -248,9 +250,9 @@ void Gizmos::addAABBFilled(const glm::vec3& a_center,
 
 	if (a_transform != nullptr)
 	{
-		vX = (*a_transform * glm::vec4(vX,0)).xyz;
-		vY = (*a_transform * glm::vec4(vY,0)).xyz;
-		vZ = (*a_transform * glm::vec4(vZ,0)).xyz;
+		vX = (*a_transform * glm::vec4(vX, 0)).xyz();
+		vY = (*a_transform * glm::vec4(vY, 0)).xyz();
+		vZ = (*a_transform * glm::vec4(vZ, 0)).xyz();
 	}
 
 	// top verts
@@ -325,12 +327,12 @@ void Gizmos::addCylinderFilled(const glm::vec3& a_center, float a_radius, float 
 
 		if (a_transform != nullptr)
 		{
-			v0top = (*a_transform * glm::vec4(v0top,0)).xyz;
-			v1top = (*a_transform * glm::vec4(v1top,0)).xyz;
-			v2top = (*a_transform * glm::vec4(v2top,0)).xyz;
-			v0bottom = (*a_transform * glm::vec4(v0bottom,0)).xyz;
-			v1bottom = (*a_transform * glm::vec4(v1bottom,0)).xyz;
-			v2bottom = (*a_transform * glm::vec4(v2bottom,0)).xyz;
+			v0top = (*a_transform * glm::vec4(v0top, 0)).xyz();
+			v1top = (*a_transform * glm::vec4(v1top, 0)).xyz();
+			v2top = (*a_transform * glm::vec4(v2top, 0)).xyz();
+			v0bottom = (*a_transform * glm::vec4(v0bottom, 0)).xyz();
+			v1bottom = (*a_transform * glm::vec4(v1bottom, 0)).xyz();
+			v2bottom = (*a_transform * glm::vec4(v2bottom, 0)).xyz();
 		}
 
 		// triangles
@@ -363,10 +365,10 @@ void Gizmos::addRing(const glm::vec3& a_center, float a_innerRadius, float a_out
 
 		if (a_transform != nullptr)
 		{
-			v1outer = (*a_transform * glm::vec4(v1outer,0)).xyz;
-			v2outer = (*a_transform * glm::vec4(v2outer,0)).xyz;
-			v1inner = (*a_transform * glm::vec4(v1inner,0)).xyz;
-			v2inner = (*a_transform * glm::vec4(v2inner,0)).xyz;
+			v1outer = (*a_transform * glm::vec4(v1outer, 0)).xyz();
+			v2outer = (*a_transform * glm::vec4(v2outer, 0)).xyz();
+			v1inner = (*a_transform * glm::vec4(v1inner, 0)).xyz();
+			v2inner = (*a_transform * glm::vec4(v2inner, 0)).xyz();
 		}
 
 		if (a_fillColour.w != 0)
@@ -401,8 +403,8 @@ void Gizmos::addDisk(const glm::vec3& a_center, float a_radius,
 
 		if (a_transform != nullptr)
 		{
-			v1outer = (*a_transform * glm::vec4(v1outer,0)).xyz;
-			v2outer = (*a_transform * glm::vec4(v2outer,0)).xyz;
+			v1outer = (*a_transform * glm::vec4(v1outer, 0)).xyz();
+			v2outer = (*a_transform * glm::vec4(v2outer, 0)).xyz();
 		}
 
 		if (a_fillColour.w != 0)
@@ -434,8 +436,8 @@ void Gizmos::addArc(const glm::vec3& a_center, float a_rotation,
 
 		if (a_transform != nullptr)
 		{
-			v1outer = (*a_transform * glm::vec4(v1outer,0)).xyz;
-			v2outer = (*a_transform * glm::vec4(v2outer,0)).xyz;
+			v1outer = (*a_transform * glm::vec4(v1outer, 0)).xyz();
+			v2outer = (*a_transform * glm::vec4(v2outer, 0)).xyz();
 		}
 
 		if (a_fillColour.w != 0)
@@ -458,8 +460,8 @@ void Gizmos::addArc(const glm::vec3& a_center, float a_rotation,
 
 		if (a_transform != nullptr)
 		{
-			v1outer = (*a_transform * glm::vec4(v1outer,0)).xyz;
-			v2outer = (*a_transform * glm::vec4(v2outer,0)).xyz;
+			v1outer = (*a_transform * glm::vec4(v1outer, 0)).xyz();
+			v2outer = (*a_transform * glm::vec4(v2outer, 0)).xyz();
 		}
 
 		addLine(a_center, a_center + v1outer, vSolid, vSolid);
@@ -485,10 +487,10 @@ void Gizmos::addArcRing(const glm::vec3& a_center, float a_rotation,
 
 		if (a_transform != nullptr)
 		{
-			v1outer = (*a_transform * glm::vec4(v1outer,0)).xyz;
-			v2outer = (*a_transform * glm::vec4(v2outer,0)).xyz;
-			v1inner = (*a_transform * glm::vec4(v1inner,0)).xyz;
-			v2inner = (*a_transform * glm::vec4(v2inner,0)).xyz;
+			v1outer = (*a_transform * glm::vec4(v1outer, 0)).xyz();
+			v2outer = (*a_transform * glm::vec4(v2outer, 0)).xyz();
+			v1inner = (*a_transform * glm::vec4(v1inner, 0)).xyz();
+			v2inner = (*a_transform * glm::vec4(v2inner, 0)).xyz();
 		}
 
 		if (a_fillColour.w != 0)
@@ -517,10 +519,10 @@ void Gizmos::addArcRing(const glm::vec3& a_center, float a_rotation,
 
 		if (a_transform != nullptr)
 		{
-			v1outer = (*a_transform * glm::vec4(v1outer,0)).xyz;
-			v2outer = (*a_transform * glm::vec4(v2outer,0)).xyz;
-			v1inner = (*a_transform * glm::vec4(v1inner,0)).xyz;
-			v2inner = (*a_transform * glm::vec4(v2inner,0)).xyz;
+			v1outer = (*a_transform * glm::vec4(v1outer, 0)).xyz();
+			v2outer = (*a_transform * glm::vec4(v2outer, 0)).xyz();
+			v1inner = (*a_transform * glm::vec4(v1inner, 0)).xyz();
+			v2inner = (*a_transform * glm::vec4(v2inner, 0)).xyz();
 		}
 
 		addLine(a_center + v1inner, a_center + v1outer, vSolid, vSolid);
@@ -562,8 +564,8 @@ void Gizmos::addSphere(const glm::vec3& a_center, float a_radius, int a_rows, in
 
 			if (a_transform != nullptr)
 			{
-				v4Point = (*a_transform * glm::vec4(v4Point,0)).xyz;
-				v4Normal = (*a_transform * glm::vec4(v4Normal,0)).xyz;
+				v4Point = (*a_transform * glm::vec4(v4Point, 0)).xyz();
+				v4Normal = (*a_transform * glm::vec4(v4Normal, 0)).xyz();
 			}
 
 			int index = row * a_columns + (col % a_columns);
@@ -629,10 +631,23 @@ void Gizmos::addLine(const glm::vec3& a_rv0, const glm::vec3& a_rv1, const glm::
 	if (sm_singleton != nullptr &&
 		sm_singleton->m_lineCount < sm_singleton->m_maxLines)
 	{
-		sm_singleton->m_lines[ sm_singleton->m_lineCount ].v0.position = glm::vec4(a_rv0,1);
-		sm_singleton->m_lines[ sm_singleton->m_lineCount ].v0.colour = a_colour0;
-		sm_singleton->m_lines[ sm_singleton->m_lineCount ].v1.position = glm::vec4(a_rv1,1);
-		sm_singleton->m_lines[ sm_singleton->m_lineCount ].v1.colour = a_colour1;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v0.x = a_rv0.x;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v0.y = a_rv0.y;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v0.z = a_rv0.z;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v0.w = 1;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v0.r = a_colour0.r;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v0.g = a_colour0.g;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v0.b = a_colour0.b;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v0.a = a_colour0.a;
+
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v1.x = a_rv1.x;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v1.y = a_rv1.y;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v1.z = a_rv1.z;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v1.w = 1;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v1.r = a_colour1.r;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v1.g = a_colour1.g;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v1.b = a_colour1.b;
+		sm_singleton->m_lines[sm_singleton->m_lineCount].v1.a = a_colour1.a;
 
 		sm_singleton->m_lineCount++;
 	}
@@ -646,12 +661,31 @@ void Gizmos::addTri(const glm::vec3& a_rv0, const glm::vec3& a_rv1, const glm::v
 		{
 			if (sm_singleton->m_triCount < sm_singleton->m_maxTris)
 			{
-				sm_singleton->m_tris[ sm_singleton->m_triCount ].v0.position = glm::vec4(a_rv0,1);
-				sm_singleton->m_tris[ sm_singleton->m_triCount ].v1.position = glm::vec4(a_rv1,1);
-				sm_singleton->m_tris[ sm_singleton->m_triCount ].v2.position = glm::vec4(a_rv2,1);
-				sm_singleton->m_tris[ sm_singleton->m_triCount ].v0.colour = a_colour;
-				sm_singleton->m_tris[ sm_singleton->m_triCount ].v1.colour = a_colour;
-				sm_singleton->m_tris[ sm_singleton->m_triCount ].v2.colour = a_colour;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v0.x = a_rv0.x;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v0.y = a_rv0.y;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v0.z = a_rv0.z;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v0.w = 1;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v1.x = a_rv1.x;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v1.y = a_rv1.y;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v1.z = a_rv1.z;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v1.w = 1;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v2.x = a_rv2.x;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v2.y = a_rv2.y;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v2.z = a_rv2.z;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v2.w = 1;
+
+				sm_singleton->m_tris[sm_singleton->m_triCount].v0.r = a_colour.r;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v0.g = a_colour.g;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v0.b = a_colour.b;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v0.w = a_colour.a;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v1.r = a_colour.r;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v1.g = a_colour.g;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v1.b = a_colour.b;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v1.w = a_colour.a;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v2.r = a_colour.r;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v2.g = a_colour.g;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v2.b = a_colour.b;
+				sm_singleton->m_tris[sm_singleton->m_triCount].v2.w = a_colour.a;
 
 				sm_singleton->m_triCount++;
 			}
@@ -660,12 +694,31 @@ void Gizmos::addTri(const glm::vec3& a_rv0, const glm::vec3& a_rv1, const glm::v
 		{
 			if (sm_singleton->m_transparentTriCount < sm_singleton->m_maxTris)
 			{
-				sm_singleton->m_transparentTris[ sm_singleton->m_transparentTriCount ].v0.position = glm::vec4(a_rv0,1);
-				sm_singleton->m_transparentTris[ sm_singleton->m_transparentTriCount ].v1.position = glm::vec4(a_rv1,1);
-				sm_singleton->m_transparentTris[ sm_singleton->m_transparentTriCount ].v2.position = glm::vec4(a_rv2,1);
-				sm_singleton->m_transparentTris[ sm_singleton->m_transparentTriCount ].v0.colour = a_colour;
-				sm_singleton->m_transparentTris[ sm_singleton->m_transparentTriCount ].v1.colour = a_colour;
-				sm_singleton->m_transparentTris[ sm_singleton->m_transparentTriCount ].v2.colour = a_colour;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v0.x = a_rv0.x;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v0.y = a_rv0.y;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v0.z = a_rv0.z;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v0.w = 1;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v1.x = a_rv1.x;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v1.y = a_rv1.y;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v1.z = a_rv1.z;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v1.w = 1;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v2.x = a_rv2.x;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v2.y = a_rv2.y;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v2.z = a_rv2.z;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v2.w = 1;
+
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v0.r = a_colour.r;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v0.g = a_colour.g;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v0.b = a_colour.b;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v0.w = a_colour.a;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v1.r = a_colour.r;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v1.g = a_colour.g;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v1.b = a_colour.b;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v1.w = a_colour.a;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v2.r = a_colour.r;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v2.g = a_colour.g;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v2.b = a_colour.b;
+				sm_singleton->m_transparentTris[sm_singleton->m_transparentTriCount].v2.w = a_colour.a;
 
 				sm_singleton->m_transparentTriCount++;
 			}
@@ -758,10 +811,22 @@ void Gizmos::add2DLine(const glm::vec2& a_rv0, const glm::vec2& a_rv1, const glm
 	if (sm_singleton != nullptr &&
 		sm_singleton->m_2DlineCount < sm_singleton->m_max2DLines)
 	{
-		sm_singleton->m_2Dlines[ sm_singleton->m_2DlineCount ].v0.position = glm::vec4(a_rv0,1,1);
-		sm_singleton->m_2Dlines[ sm_singleton->m_2DlineCount ].v0.colour = a_colour0;
-		sm_singleton->m_2Dlines[ sm_singleton->m_2DlineCount ].v1.position = glm::vec4(a_rv1,1,1);
-		sm_singleton->m_2Dlines[ sm_singleton->m_2DlineCount ].v1.colour = a_colour1;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v0.x = a_rv0.x;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v0.y = a_rv0.y;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v0.z = 1;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v0.w = 1;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v0.r = a_colour0.r;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v0.g = a_colour0.g;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v0.b = a_colour0.b;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v0.a = a_colour0.a;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v1.x = a_rv1.x;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v1.y = a_rv1.y;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v1.z = 1;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v1.w = 1;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v1.r = a_colour1.r;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v1.g = a_colour1.g;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v1.b = a_colour1.b;
+		sm_singleton->m_2Dlines[sm_singleton->m_2DlineCount].v1.a = a_colour1.a;
 
 		sm_singleton->m_2DlineCount++;
 	}
@@ -773,16 +838,39 @@ void Gizmos::add2DTri(const glm::vec2& a_rv0, const glm::vec2& a_rv1, const glm:
 	{
 		if (sm_singleton->m_2DtriCount < sm_singleton->m_max2DTris)
 		{
-			sm_singleton->m_2Dtris[ sm_singleton->m_2DtriCount ].v0.position = glm::vec4(a_rv0,1,1);
-			sm_singleton->m_2Dtris[ sm_singleton->m_2DtriCount ].v1.position = glm::vec4(a_rv1,1,1);
-			sm_singleton->m_2Dtris[ sm_singleton->m_2DtriCount ].v2.position = glm::vec4(a_rv2,1,1);
-			sm_singleton->m_2Dtris[ sm_singleton->m_2DtriCount ].v0.colour = a_colour;
-			sm_singleton->m_2Dtris[ sm_singleton->m_2DtriCount ].v1.colour = a_colour;
-			sm_singleton->m_2Dtris[ sm_singleton->m_2DtriCount ].v2.colour = a_colour;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v0.x = a_rv0.x;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v0.y = a_rv0.y;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v0.z = 1;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v0.w = 1;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v1.x = a_rv1.x;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v1.y = a_rv1.y;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v1.z = 1;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v1.w = 1;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v2.x = a_rv2.x;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v2.y = a_rv2.y;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v2.z = 1;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v2.w = 1;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v0.r = a_colour.r;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v0.g = a_colour.g;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v0.b = a_colour.b;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v0.a = a_colour.a;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v1.r = a_colour.r;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v1.g = a_colour.g;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v1.b = a_colour.b;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v1.a = a_colour.a;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v2.r = a_colour.r;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v2.g = a_colour.g;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v2.b = a_colour.b;
+			sm_singleton->m_2Dtris[sm_singleton->m_2DtriCount].v2.a = a_colour.a;
 
 			sm_singleton->m_2DtriCount++;
 		}
 	}
+}
+
+void Gizmos::draw(const glm::mat4& a_projection, const glm::mat4& a_view)
+{
+	draw(a_projection * a_view);
 }
 
 void Gizmos::draw(const glm::mat4& a_projectionView)
