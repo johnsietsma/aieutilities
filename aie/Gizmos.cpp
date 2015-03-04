@@ -2,7 +2,9 @@
 #include <gl_core_4_4.h>
 #define GLM_SWIZZLE
 #include <glm/glm.hpp>
-#include <glm/ext.hpp>
+#include <glm/gtc/constants.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <stdio.h>
 
 Gizmos* Gizmos::sm_singleton = nullptr;
 
@@ -35,8 +37,8 @@ Gizmos::Gizmos(unsigned int a_maxLines, unsigned int a_maxTris,
 					 in vec4 vColour; \
                      out vec4 FragColor; \
 					 void main()	{ FragColor = vColour; }";
-    
-    
+
+
 	unsigned int vs = glCreateShader(GL_VERTEX_SHADER);
 	unsigned int fs = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -52,7 +54,7 @@ Gizmos::Gizmos(unsigned int a_maxLines, unsigned int a_maxTris,
 	glBindAttribLocation(m_shader, 0, "Position");
 	glBindAttribLocation(m_shader, 1, "Colour");
 	glLinkProgram(m_shader);
-    
+
 	int success = GL_FALSE;
     glGetProgramiv(m_shader, GL_LINK_STATUS, &success);
 	if (success == GL_FALSE)
@@ -60,7 +62,7 @@ Gizmos::Gizmos(unsigned int a_maxLines, unsigned int a_maxTris,
 		int infoLogLength = 0;
 		glGetShaderiv(m_shader, GL_INFO_LOG_LENGTH, &infoLogLength);
 		char* infoLog = new char[infoLogLength];
-        
+
 		glGetShaderInfoLog(m_shader, infoLogLength, 0, infoLog);
 		printf("Error: Failed to link Gizmo shader program!\n%s\n", infoLog);
 		delete[] infoLog;
@@ -68,7 +70,7 @@ Gizmos::Gizmos(unsigned int a_maxLines, unsigned int a_maxTris,
 
 	glDeleteShader(vs);
 	glDeleteShader(fs);
-    
+
     // create VBOs
 	glGenBuffers( 1, &m_lineVBO );
 	glBindBuffer(GL_ARRAY_BUFFER, m_lineVBO);
@@ -176,7 +178,7 @@ void Gizmos::clear()
 	sm_singleton->m_2DtriCount = 0;
 }
 
-// Adds 3 unit-length lines (red,green,blue) representing the 3 axis of a transform, 
+// Adds 3 unit-length lines (red,green,blue) representing the 3 axis of a transform,
 // at the transform's translation. Optional scale available.
 void Gizmos::addTransform(const glm::mat4& a_transform, float a_fScale /* = 1.0f */)
 {
@@ -193,9 +195,9 @@ void Gizmos::addTransform(const glm::mat4& a_transform, float a_fScale /* = 1.0f
 	addLine(a_transform[3].xyz(), vZAxis.xyz(), vBlue, vBlue);
 }
 
-void Gizmos::addAABB(const glm::vec3& a_center, 
-	const glm::vec3& a_rvExtents, 
-	const glm::vec4& a_colour, 
+void Gizmos::addAABB(const glm::vec3& a_center,
+	const glm::vec3& a_rvExtents,
+	const glm::vec4& a_colour,
 	const glm::mat4* a_transform /* = nullptr */)
 {
 	glm::vec3 vVerts[8];
@@ -238,9 +240,9 @@ void Gizmos::addAABB(const glm::vec3& a_center,
 	addLine(vVerts[3], vVerts[7], a_colour, a_colour);
 }
 
-void Gizmos::addAABBFilled(const glm::vec3& a_center, 
-	const glm::vec3& a_rvExtents, 
-	const glm::vec4& a_fillColour, 
+void Gizmos::addAABBFilled(const glm::vec3& a_center,
+	const glm::vec3& a_rvExtents,
+	const glm::vec4& a_fillColour,
 	const glm::mat4* a_transform /* = nullptr */)
 {
 	glm::vec3 vVerts[8];
@@ -469,7 +471,7 @@ void Gizmos::addArc(const glm::vec3& a_center, float a_rotation,
 	}
 }
 
-void Gizmos::addArcRing(const glm::vec3& a_center, float a_rotation, 
+void Gizmos::addArcRing(const glm::vec3& a_center, float a_rotation,
 	float a_innerRadius, float a_outerRadius, float a_arcHalfAngle,
 	unsigned int a_segments, const glm::vec4& a_fillColour, const glm::mat4* a_transform /* = nullptr */)
 {
@@ -530,8 +532,8 @@ void Gizmos::addArcRing(const glm::vec3& a_center, float a_rotation,
 	}
 }
 
-void Gizmos::addSphere(const glm::vec3& a_center, float a_radius, int a_rows, int a_columns, const glm::vec4& a_fillColour, 
-								const glm::mat4* a_transform /*= nullptr*/, float a_longMin /*= 0.f*/, float a_longMax /*= 360*/, 
+void Gizmos::addSphere(const glm::vec3& a_center, float a_radius, int a_rows, int a_columns, const glm::vec4& a_fillColour,
+								const glm::mat4* a_transform /*= nullptr*/, float a_longMin /*= 0.f*/, float a_longMax /*= 360*/,
 								float a_latMin /*= -90*/, float a_latMax /*= 90*/)
 {
 	float inverseRadius = 1/a_radius;
@@ -540,7 +542,7 @@ void Gizmos::addSphere(const glm::vec3& a_center, float a_radius, int a_rows, in
 	float invRows = 1.0f/float(a_rows);
 
 	float DEG2RAD = glm::pi<float>() / 180;
-	
+
 	//Lets put everything in radians first
 	float latitiudinalRange = (a_latMax - a_latMin) * DEG2RAD;
 	float longitudinalRange = (a_longMax - a_longMin) * DEG2RAD;
@@ -554,7 +556,7 @@ void Gizmos::addSphere(const glm::vec3& a_center, float a_radius, int a_rows, in
 		float radiansAboutXAxis  = ratioAroundXAxis * latitiudinalRange + (a_latMin * DEG2RAD);
 		float y  =  a_radius * sin(radiansAboutXAxis);
 		float z  =  a_radius * cos(radiansAboutXAxis);
-		
+
 		for ( int col = 0; col <= a_columns; ++col )
 		{
 			float ratioAroundYAxis   = float(col) * invColumns;
@@ -572,18 +574,18 @@ void Gizmos::addSphere(const glm::vec3& a_center, float a_radius, int a_rows, in
 			v4Array[index] = v4Point;
 		}
 	}
-	
+
 	for (int face = 0; face < (a_rows)*(a_columns); ++face )
 	{
-		int iNextFace = face + 1;		
-		
+		int iNextFace = face + 1;
+
 		if( iNextFace % a_columns == 0 )
 		{
 			iNextFace = iNextFace - (a_columns);
 		}
 
 		addLine(a_center + v4Array[face], a_center + v4Array[face+a_columns], glm::vec4(1.f,1.f,1.f,1.f), glm::vec4(1.f,1.f,1.f,1.f));
-		
+
 		if( face % a_columns == 0 && longitudinalRange < (glm::pi<float>() * 2))
 		{
 				continue;
@@ -591,10 +593,10 @@ void Gizmos::addSphere(const glm::vec3& a_center, float a_radius, int a_rows, in
 		addLine(a_center + v4Array[iNextFace+a_columns], a_center + v4Array[face+a_columns], glm::vec4(1.f,1.f,1.f,1.f), glm::vec4(1.f,1.f,1.f,1.f));
 
 		addTri( a_center + v4Array[iNextFace+a_columns], a_center + v4Array[face], a_center + v4Array[iNextFace], a_fillColour);
-		addTri( a_center + v4Array[iNextFace+a_columns], a_center + v4Array[face+a_columns], a_center + v4Array[face], a_fillColour);		
+		addTri( a_center + v4Array[iNextFace+a_columns], a_center + v4Array[face+a_columns], a_center + v4Array[face], a_fillColour);
 	}
 
-	delete[] v4Array;	
+	delete[] v4Array;
 }
 
 void Gizmos::addHermiteSpline(const glm::vec3& a_start, const glm::vec3& a_end,
@@ -727,7 +729,7 @@ void Gizmos::addTri(const glm::vec3& a_rv0, const glm::vec3& a_rv1, const glm::v
 }
 
 void Gizmos::add2DAABB(const glm::vec2& a_center, const glm::vec2& a_extents, const glm::vec4& a_colour, const glm::mat4* a_transform /*= nullptr*/)
-{	
+{
 	glm::vec2 verts[4];
 	glm::vec2 vX(a_extents.x, 0);
 	glm::vec2 vY(0, a_extents.y);
@@ -750,7 +752,7 @@ void Gizmos::add2DAABB(const glm::vec2& a_center, const glm::vec2& a_extents, co
 }
 
 void Gizmos::add2DAABBFilled(const glm::vec2& a_center, const glm::vec2& a_extents, const glm::vec4& a_colour, const glm::mat4* a_transform /*= nullptr*/)
-{	
+{
 	glm::vec2 verts[4];
 	glm::vec2 vX(a_extents.x, 0);
 	glm::vec2 vY(0, a_extents.y);
@@ -765,7 +767,7 @@ void Gizmos::add2DAABBFilled(const glm::vec2& a_center, const glm::vec2& a_exten
 	verts[1] = a_center + vX - vY;
 	verts[2] = a_center + vX + vY;
 	verts[3] = a_center - vX + vY;
-	
+
 	add2DTri(verts[0], verts[1], verts[2], a_colour);
 	add2DTri(verts[0], verts[2], verts[3], a_colour);
 }
@@ -881,7 +883,7 @@ void Gizmos::draw(const glm::mat4& a_projectionView)
 		glGetIntegerv(GL_CURRENT_PROGRAM, &shader);
 
 		glUseProgram(sm_singleton->m_shader);
-		
+
 		unsigned int projectionViewUniform = glGetUniformLocation(sm_singleton->m_shader,"ProjectionView");
 		glUniformMatrix4fv(projectionViewUniform, 1, false, glm::value_ptr(a_projectionView));
 
@@ -944,7 +946,7 @@ void Gizmos::draw2D(const glm::mat4& a_projection)
 		glGetIntegerv(GL_CURRENT_PROGRAM, &shader);
 
 		glUseProgram(sm_singleton->m_shader);
-		
+
 		unsigned int projectionViewUniform = glGetUniformLocation(sm_singleton->m_shader,"ProjectionView");
 		glUniformMatrix4fv(projectionViewUniform, 1, false, glm::value_ptr(a_projection));
 
