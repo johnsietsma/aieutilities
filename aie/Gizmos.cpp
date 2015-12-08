@@ -1,5 +1,5 @@
 #include <aie/Gizmos.h>
-#include <Graphics/gl_core_4_1.h>
+#include <Graphics/gl_core_4_4.h>
 #define GLM_SWIZZLE
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
